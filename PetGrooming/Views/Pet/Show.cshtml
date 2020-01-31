@@ -4,8 +4,25 @@
     ViewBag.Title = "Show";
 }
 
+<!--Showing the details of an individual pet-->
 <h2>Show Pet</h2>
-
-<div>Name : @Model.PetName</div>
-<div>Weight : @Model.Weight</div>
-<div>Species : @Model.Species.Name</div>
+<table class="table table-striped table-hover">
+    <tr>
+        <td class="col-md-2">Name :</td>
+        <td> @Model.PetName</td>
+    </tr>
+    <tr>
+        <td>Weight :</td>
+        <td> @Model.Weight</td>
+    </tr>
+    <tr>
+        <td>Species :</td>
+        <td> @Model.Species.Name</td>
+    </tr>
+</table>
+<!--Link to go back to the list pet page -->
+<a class="btn btn-primary" href="/Pet/List">Back</a>
+<!--Link to update the details submitted in the form -->
+<a class="btn btn-warning" href="/Pet/Update/@Model.PetID">Update</a>
+<!--Link to go back to delete the specific pet-->
+<a class="btn btn-danger" href="/Pet/Delete/@Model.PetID">Delete</a>

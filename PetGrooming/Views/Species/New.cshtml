@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "New";
+}
+<h2>Add a New Species</h2>
+<!-- Form to get the speices details form the user and to call the [HttpPost] ActionResult ADD -->
+<form method="POST" action="/Species/New">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Name:</label>
+        <input class="form-control" id="SpeciesName" type="text" name="SpeciesName" />
+    </div>
+    <!-- Button to submit the form-->
+    <input type="submit" class="btn btn-primary" value="Add">
+    <!-- Link styled as a button to go back to the list page-->
+    <a class="btn btn-warning" href="/Species/List">Back</a>
+</form>
+

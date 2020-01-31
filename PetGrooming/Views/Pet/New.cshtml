@@ -2,31 +2,43 @@
 @{
     ViewBag.Title = "Add";
 }
-
 <h2>Add a New Pet</h2>
-
+<!-- Form to get details form the user and to call the [HttpPost] ActionResult ADD -->
 <form method="POST" action="/Pet/Add">
-    <!-- TODO: format this nicely -->
-    <div><span>Name:</span><input id="PetName" type="text" name="PetName" /></div>
-    <div>
-        <span>Species:</span>
-        <select id="SpeciesID" type="text" name="SpeciesID">
-            @{ 
-                //A rendering loop for presenting a list of species
-                //The pet should be one of these species
-                foreach(var species in Model)
-                {
-                    <option value="@species.SpeciesID">@species.Name</option>
 
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <label class="col-sm-2 col-form-label">Name:</label>
+            <input class="form-control" id="PetName" type="text" name="PetName" />
+        </div>
+        <div class="col-sm-10">
+            <label class="col-sm-2 col-form-label">Species:</label>
+            <select class="form-control" id="SpeciesID" type="text" name="SpeciesID">
+                @{
+                    //Looping through species to display the species list for the user to choose it from
+                    foreach (var species in Model)
+                    {
+                        <option value="@species.SpeciesID">@species.Name</option>
+                    }
                 }
-            }
-        </select>
+            </select>
+        </div>
+        <div class="col-sm-10">
+            <label class="col-sm-2 col-form-label">Weight:</label>
+            <input class="form-control" id="PetWeight" type="text" name="PetWeight" />
+        </div>
+        <div class="col-sm-10">
+            <label class="col-sm-2 col-form-label">Color:</label>
+            <input class="form-control" id="PetColor" type="text" name="PetColor" />
+        </div>
+        <div class="col-sm-10">
+            <label class="col-sm-2 col-form-label">Notes:</label>
+            <textarea class="form-control" id="PetNotes" name="PetNotes"></textarea>
+        </div>
     </div>
-    <div><span>Weight:</span><input id="PetWeight" type="text" name="PetWeight" />KG</div>
-    <div><span>Color:</span><input id="PetColor" type="text" name="PetColor" /></div>
-    <div>Notes:</div>
-    <textarea id="PetNotes" name="PetNotes">
 
-    </textarea>
-    <input type="submit" value="Add Pet">
+    <!-- Button to submit the form-->
+    <input type="submit" class="btn btn-primary" value="Add Pet">
+    <!-- Link styled as a button to go back to the list page-->
+    <a class="btn btn-warning" href="/Pet/List">Back</a>
 </form>

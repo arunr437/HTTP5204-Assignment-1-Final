@@ -1,7 +1,21 @@
-﻿
+﻿@model PetGrooming.Models.Species
+
 @{
     ViewBag.Title = "Show";
 }
 
-<h2>Show</h2>
+<h2>Show Species</h2>
+<table class="table table-striped table-hover">
+    <tr>
+        <td class="col-md-2">Name : @Model.Name</td>
+    </tr>
+
+</table>
+<!--Link to go back to the list species page -->
+<a class="btn btn-primary" href="/Species/List">Back</a>
+<!--Link to update the details posted in the form -->
+<a class="btn btn-warning" href="/Species/Update/@Model.SpeciesID">Update</a>
+<!--Link to go back to delete the specific species-->
+<a class="btn btn-danger" href="/Species/Delete/@Model.SpeciesID">Delete</a>
+
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-//required for SqlParameter class
 using System.Data.SqlClient;
 using System.Data.Entity;
 using System.Linq;
@@ -16,127 +15,123 @@ namespace PetGrooming.Controllers
 {
     public class PetController : Controller
     {
-        /*
-        These reading resources will help you understand and navigate the MVC environment
- 
-        Q: What is an MVC controller?
 
-        - https://docs.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/controllers-and-routing/aspnet-mvc-controllers-overview-cs
-
-        Q: What does it mean to "Pass Data" from the Controller to the View?
-
-        - http://www.webdevelopmenthelp.net/2014/06/using-model-pass-data-asp-net-mvc.html
-
-        Q: What is an SQL injection attack?
-
-        - https://www.w3schools.com/sql/sql_injection.asp
-
-        Q: How can we prevent SQL injection attacks?
-
-        - https://www.completecsharptutorial.com/ado-net/insert-records-using-simple-and-parameterized-query-c-sql.php
-
-        Q: How can I run an SQL query against a database inside a controller file?
-
-        - https://www.entityframeworktutorial.net/EntityFramework4.3/raw-sql-query-in-entity-framework.aspx
- 
-         */
         private PetGroomingContext db = new PetGroomingContext();
 
-        // GET: Pet
+        // GET: This method is for getting the list of pets
         public ActionResult List()
         {
-            //How could we modify this to include a search bar?
+            //Query to select the list of pets
             List<Pet> pets = db.Pets.SqlQuery("Select * from Pets").ToList();
+            //Calling the Pets List View to display the pet list
             return View(pets);
            
         }
 
-        // GET: Pet/Details/5
+        // GET: This method is used to display a specific pet based on the id
         public ActionResult Show(int? id)
         {
+            //Checking if petid is null
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            // Pet pet = db.Pets.Find(id); //EF 6 technique
+            
+            //Query to get the pet with the petid 'id'.
             Pet pet = db.Pets.SqlQuery("select * from pets where petid=@PetID", new SqlParameter("@PetID",id)).FirstOrDefault();
             if (pet == null)
             {
                 return HttpNotFound();
             }
+            //Calling the pet show view to display the specific pet
             return View(pet);
         }
 
-        //THE [HttpPost] Means that this method will only be activated on a POST form submit to the following URL
-        //URL: /Pet/Add
+        //POST: This method is used get the values entered in the form and update in the database.
         [HttpPost]
-        public ActionResult Add(string PetName, Double PetWeight, String PetColor, int SpeciesID, string PetNotes)
+        public ActionResult Add( string PetName, Double PetWeight, String PetColor, int SpeciesID, string PetNotes)
         {
-            //STEP 1: PULL DATA! The data is access as arguments to the method. Make sure the datatype is correct!
-            //The variable name  MUST match the name attribute described in Views/Pet/Add.cshtml
-
-            //Tests are very useul to determining if you are pulling data correctly!
-            //Debug.WriteLine("Want to create a pet with name " + PetName + " and weight " + PetWeight.ToString()) ;
-
-            //STEP 2: FORMAT QUERY! the query will look something like "insert into () values ()"...
+            
+            //Query to insert the pet into the database
             string query = "insert into pets (PetName, Weight, color, SpeciesID, Notes) values (@PetName,@PetWeight,@PetColor,@SpeciesID,@PetNotes)";
-            SqlParameter[] sqlparams = new SqlParameter[5]; //0,1,2,3,4 pieces of information to add
-            //each piece of information is a key and value pair
+            SqlParameter[] sqlparams = new SqlParameter[5]; //Creating an object of class SQLParameter
+            
+            //Defining the parameters that are used in the query above.
             sqlparams[0] = new SqlParameter("@PetName",PetName);
             sqlparams[1] = new SqlParameter("@PetWeight", PetWeight);
             sqlparams[2] = new SqlParameter("@PetColor", PetColor);
             sqlparams[3] = new SqlParameter("@SpeciesID", SpeciesID);
             sqlparams[4] = new SqlParameter("@PetNotes",PetNotes);
 
-            //db.Database.ExecuteSqlCommand will run insert, update, delete statements
-            //db.Pets.SqlCommand will run a select statement, for example.
+            
+            //Executing the query with the parameters defined above
             db.Database.ExecuteSqlCommand(query, sqlparams);
 
             
-            //run the list method to return to a list of pets so we can see our new one!
+            //Returning back to the List page
             return RedirectToAction("List");
         }
 
-
+        //GET: Function to get the list of species that will be displayed in the create pet page
         public ActionResult New()
         {
-            //STEP 1: PUSH DATA!
-            //What data does the Add.cshtml page need to display the interface?
-            //A list of species to choose for a pet
 
-            //alternative way of writing SQL -- will learn more about this week 4
-            //List<Species> Species = db.Species.ToList();
+            //Query to get the list of species from the database.
 
             List<Species> species = db.Species.SqlQuery("select * from Species").ToList();
 
+            //Calling the Pet view again along with the species list
             return View(species);
         }
 
+        //GET: Function to get the specific pet details that will be displayed in the update pet page 
         public ActionResult Update(int id)
         {
-            //need information about a particular pet
+            //Getting information about the specific pet
             Pet selectedpet = db.Pets.SqlQuery("select * from pets where petid = @id", new SqlParameter("@id",id)).FirstOrDefault();
 
+            //Calling the view with the details about the pet to be displayed for update. 
             return View(selectedpet);
         }
 
+        //POST: Function to get the details from the form and update in the database
         [HttpPost]
-        public ActionResult Update(string PetName, string PetColor, double PetWeight)
+        public ActionResult Update(int ?id, string PetName, string PetColor, double PetWeight,string PetNotes)
         {
 
             Debug.WriteLine("I am trying to edit a pet's name to "+PetName+" and change the weight to "+PetWeight.ToString());
 
-            //logic for updating the pet in the database goes here
+            //Query to update the pet with the values passed in the form
+            string query = "update pets set PetName = @PetName, Weight = @PetWeight, color = @PetColor, Notes = @PetNotes where PetID = @PetID";
+            SqlParameter[] sqlparams = new SqlParameter[5]; 
+
+            sqlparams[0] = new SqlParameter("@PetName", PetName);
+            sqlparams[1] = new SqlParameter("@PetWeight", PetWeight);
+            sqlparams[2] = new SqlParameter("@PetColor", PetColor);
+            sqlparams[3] = new SqlParameter("@PetNotes", PetNotes);
+            sqlparams[4] = new SqlParameter("@PetID", id);
+
+            //Executing the sql query along with the Parameters defined above
+            db.Database.ExecuteSqlCommand(query, sqlparams);
+            //Going back to the list pet page. 
             return RedirectToAction("List");
         }
-      
 
-        //TODO:
-        //Update
-        //[HttpPost] Update
-        //[HttpPost] Delete
-        //(optional) Delete
-        
+        //Method to delete the pet based on the petID passed
+        public ActionResult Delete(int id)
+        {
+            //Query to delete the pet from the database
+            string query = "delete from pets where PetID = @PetID";
+
+            //Creating the parameter object and definig it
+            SqlParameter[] sqlparams = new SqlParameter[1]; 
+            sqlparams[0] = new SqlParameter("@PetID", id);
+
+            //Executing the query along with the parameters passed above
+            db.Database.ExecuteSqlCommand(query, sqlparams);
+            //Going back to the list page
+            return RedirectToAction("List");
+        }
 
         protected override void Dispose(bool disposing)
         {

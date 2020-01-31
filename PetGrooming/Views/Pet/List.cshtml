@@ -4,16 +4,40 @@
     ViewBag.Title = "List";
 }
 
-<h2>List of Pets</h2>
-
-@{ 
-    foreach(var Pet in Model)
-    {
-        <div>
-            <span><a href="/Pet/Show/@Pet.PetID">@Pet.PetName</a></span>
-            <span>@Pet.Species.Name</span>
-            <span>@Pet.Weight</span>
-            <span><a href="/Pet/Update/@Pet.PetID">Update</a></span>
-        </div>
+<!-- Displaying the List of Pets-->
+<h2>Pets List</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Species</th>
+            <th>Weight</th>
+            <th colspan="2">Action</th>
+        </tr>
+    </thead>
+    @{
+        //Looping through all the pets to display their details
+        foreach (var Pet in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="/Pet/Show/@Pet.PetID">@Pet.PetName</a>
+                    </td>
+                    <td>
+                        @Pet.Species.Name
+                    </td>
+                    <td>
+                        @Pet.Weight
+                    </td>
+                    <td>
+                        <a class="btn btn-warning" href="/Pet/Update/@Pet.PetID">Update</a>
+                        <a class="btn btn-danger" href="/Pet/Delete/@Pet.PetID">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        }
     }
-}
+</table>
+<!-- Link to create a new pet-->
+<a class="btn btn-primary" href="/Pet/New/">New Pet</a>

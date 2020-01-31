@@ -1,18 +1,30 @@
 ﻿@model PetGrooming.Models.Pet
-
-
 @{
     ViewBag.Title = "Update";
 }
-
-<h2>Update</h2>
+<!-- Form to get details form the user and to call the [HttpPost] ActionResult ADD -->
+<h2>Update Pet</h2>
 <form action="/Pet/Update/@Model.PetID" method="POST">
-    <span>Pet Name</span><input type="text" value="@Model.PetName" id="PetName" name="PetName"/><br />
-    <span>Pet Color</span><input type="text" value="@Model.Color" id="PetColor" name="PetColor"/><br />
-    <span>Pet Weight</span><input type="text" value="@Model.Weight" id="PetWeight" name="PetWeight"/><br />
-    <div>
-        <span>Pet Notes</span>
-        <textarea id="PetNotes" name="PetNotes">@Model.Notes</textarea>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <label class="col-sm-2 col-form-label">Pet Name</label>
+            <input class="form-control" type="text" value="@Model.PetName" id="PetName" name="PetName" />
+        </div>
+        <div class="col-sm-10">
+            <label class="col-sm-2 col-form-label">Pet Color</label>
+            <input class="form-control" type="text" value="@Model.Color" id="PetColor" name="PetColor" /><br />
+        </div>
+        <div class="col-sm-10">
+            <label class="col-sm-2 col-form-label">Pet Weight</label>
+            <input class="form-control" type="text" value="@Model.Weight" id="PetWeight" name="PetWeight" /><br />
+        </div>
+        <div class="col-sm-10">
+            <label class="col-sm-2 col-form-label">Pet Notes</label>
+            <textarea class="form-control" id="PetNotes" name="PetNotes">@Model.Notes</textarea>
+        </div>
     </div>
-    <input type="submit" value="update pet" />
+    <!--Button to submit a post request to the controller to execute the update query-->
+    <input type="submit" class="btn btn-primary" value="Update" />
+    <!--Link to go back to the list page-->
+    <a class="btn btn-warning" href="/Pet/List">Back</a>
 </form>
